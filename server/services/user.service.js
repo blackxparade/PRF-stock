@@ -8,6 +8,7 @@ var db = mongo.db(config.connectionString, { native_parser: true });
 db.bind('users');
 
 var service = {};
+var currentmoney;
 
 service.authenticate = authenticate;
 service.getAll = getAll;
@@ -178,3 +179,25 @@ function _delete(_id) {
 
     return deferred.promise;
 }
+
+/*
+Demo function, it doubles the aa user's money in every 5 seconds.
+*/
+
+setInterval(function() {
+  console.log("Updating stocks...");
+
+  db.users.findOne({username: 'aa'}, function(err, result) {
+    if (!err) {
+      console.log('result money ' + result.money);
+      currentmoney = result.money;
+
+      db.users.update({username:'aa'}, {$set:{money:currentmoney*2}}, function(err, result) {
+          if (!err) console.log('Money updated!!');
+      });
+
+      console.log('currentmoney ' + currentmoney);
+
+    }
+  });
+}, 5000);
