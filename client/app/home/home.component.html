@@ -8,5 +8,13 @@
             - <a (click)="deleteUser(user._id)">Delete</a>
         </li>
     </ul>
+
+    <h3>Részvények:</h3>
+    <ul>
+        <li *ngFor="let stock of stocks">
+            {{stock.stockname}} ({{stock.price}})
+        </li>
+    </ul>
+    
     <p><a [routerLink]="['/login']">Logout</a></p>
 </div>
