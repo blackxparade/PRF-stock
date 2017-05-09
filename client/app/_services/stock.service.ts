@@ -26,4 +26,5 @@ export class StockService {
     delete(_id: string) {
         return this.http.delete(this.config.apiUrl + '/stocks/' + _id);
     }*/
+
 }

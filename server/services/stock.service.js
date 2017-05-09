@@ -17,8 +17,6 @@ service.update = update;
 
 module.exports = service;
 
-
-
 function getAll() {
     var deferred = Q.defer();
 
@@ -27,7 +25,7 @@ function getAll() {
 
         // return users (without hashed passwords)
         stocks = _.map(stocks, function (stock) {
-            return _.omit(stock, 'hash');
+            return _.omit(stock, '_id');
         });
 
         deferred.resolve(stocks);
@@ -162,22 +160,3 @@ function _delete(_id) {
 /*
 Demo function, it doubles the aa user's money in every 5 seconds.
 */
-
-setInterval(function() {
-  console.log("Updating stocks...");
-
-  db.stocks.findOne({stockname: 'ss'}, function(err, result) {
-    if (!err) {
-      console.log('result money ' + result.price);
-      currentprice = result.price;
-
-      db.stocks.update({stockname:'ss'}, {$set:{price:currentprice*2}}, function(err, result) {
-          if (!err) console.log('Price updated!!');
-      });
-
-      console.log('currentprice ' + currentprice);
-
-    }
-  });
-}, 5000);
-

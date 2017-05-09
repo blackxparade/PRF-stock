@@ -11,10 +11,10 @@
 
     <h3>Részvények:</h3>
     <ul>
-        <li *ngFor="let stock of stocks">
-            {{stock.stockname}} ({{stock.price}})
+        <li *ngFor="let s of stocks">
+            {{s.stockname}} {{s.price * 2}}
         </li>
     </ul>
-    
+
     <p><a [routerLink]="['/login']">Logout</a></p>
 </div>

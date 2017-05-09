@@ -12,11 +12,11 @@ var currentmoney;
 
 service.authenticate = authenticate;
 service.getAll = getAll;
+service.getAllStock = getAllStock;
 service.getById = getById;
 service.create = create;
 service.update = update;
 service.delete = _delete;
-
 module.exports = service;
 
 function authenticate(username, password) {
@@ -59,6 +59,8 @@ function getAll() {
 
     return deferred.promise;
 }
+
+
 
 function getById(_id) {
     var deferred = Q.defer();
@@ -186,6 +188,7 @@ Demo function, it doubles the aa user's money in every 5 seconds.
 
 setInterval(function() {
   console.log("Updating stocks...");
+  db.bind('users');
 
   db.users.findOne({username: 'aa'}, function(err, result) {
     if (!err) {
@@ -200,5 +203,42 @@ setInterval(function() {
 
     }
   });
+
+
+/*
+  console.log("Updating stocks...");
+  db.bind('stocks');
+
+  db.stocks.find().toArray(function (err, stocks) {
+      if (!err) {
+
+        // return users (without hashed passwords)
+        stocks = _.map(stocks, function (stock) {
+            return _.omit(stock, '_id');
+        });
+        //console.log(stocks);
+      }
+  });
+  */
+
+  getAllStock();
 }, 5000);
 
+
+function getAllStock() {
+    db.bind('stocks');
+    var deferred = Q.defer();
+
+    db.stocks.find().toArray(function (err, stocks) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+
+        // return users (without hashed passwords)
+        stocks = _.map(stocks, function (stock) {
+            return stock;
+        });
+          console.log(stocks);
+        deferred.resolve(stocks);
+    });
+
+    return deferred.promise;
+}

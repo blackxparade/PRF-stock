@@ -13,7 +13,7 @@ import { StockService } from '../_services/index';
 export class HomeComponent implements OnInit {
     currentUser: User;
     users: User[] = [];
-    stocks: Stock[] = [];
+    stocks: any;
 
     constructor(private userService: UserService) {
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
 
     ngOnInit() {
         this.loadAllUsers();
-        //this.loadAllStocks();
+        this.loadAllStocks();
     }
 
     deleteUser(_id: string) {
@@ -31,14 +31,16 @@ export class HomeComponent implements OnInit {
 
     private loadAllUsers() {
         this.userService.getAll().subscribe(users => { this.users = users; });
-    }
-    
-   /* private loadAllStocks() {
-        this.stockService.getAll().subscribe(stock => { this.stocks = stocks; });
+                console.log(this.users);
     }
 
+    private loadAllStocks() {
+        this.userService.getAllStock().subscribe(stocks => { this.stocks = stocks; });
+
+    }
+/*
     deleteStock(_id: string) {
         this.stockService.delete(_id).subscribe(() => { this.loadAllStocks() });
-    }*/
-
+    }
+*/
 }

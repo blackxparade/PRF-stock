@@ -19,6 +19,7 @@ var HomeComponent = (function () {
     }
     HomeComponent.prototype.ngOnInit = function () {
         this.loadAllUsers();
+        this.loadAllStocks();
     };
     HomeComponent.prototype.deleteUser = function (_id) {
         var _this = this;
@@ -27,6 +28,11 @@ var HomeComponent = (function () {
     HomeComponent.prototype.loadAllUsers = function () {
         var _this = this;
         this.userService.getAll().subscribe(function (users) { _this.users = users; });
+        console.log(this.users);
+    };
+    HomeComponent.prototype.loadAllStocks = function () {
+        var _this = this;
+        this.userService.getAllStock().subscribe(function (stocks) { _this.stocks = stocks; });
     };
     return HomeComponent;
 }());
