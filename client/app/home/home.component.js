@@ -42,6 +42,14 @@ var HomeComponent = (function () {
         var _this = this;
         this.userService.getAllUserStock().subscribe(function (userstocks) { _this.userstocks = userstocks; });
     };
+    HomeComponent.prototype.buyStocks = function (us) {
+        var _this = this;
+        this.userService.buyStocks(us).subscribe(function () { _this.loadAllUserStocks(); });
+        console.log(us);
+    };
+    HomeComponent.prototype.sellStock = function (stockname) {
+        console.log(stockname);
+    };
     return HomeComponent;
 }());
 HomeComponent = __decorate([

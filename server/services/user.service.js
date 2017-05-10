@@ -14,6 +14,7 @@ service.authenticate = authenticate;
 service.getAll = getAll;
 service.getAllStock = getAllStock;
 service.getAllUserStock = getAllUserStock;
+service.buyStocks = buyStocks;
 service.getById = getById;
 service.create = create;
 service.update = update;
@@ -183,6 +184,18 @@ function _delete(_id) {
     return deferred.promise;
 }
 
+function buyStocks(us) {
+  db.bind('userstocks');
+  //db.userstocks.findOne({username: 'aa', stockname: 'Samsung'},{'amount'});
+  var _amount;
+  db.userstocks.findOne({ 'username': us.username, 'stockname': us.stockname }, function (err, stock) {
+    if (err) return handleError(err);
+    console.log(stock.amount);
+    db.userstocks.findOneAndUpdate({username: us.username, stockname: us.stockname},
+                                  {username: us.username, stockname: us.stockname, amount:stock.amount + 1});
+  });
+}
+
 /*
 Demo function, it doubles the aa user's money in every 5 seconds.
 */
@@ -224,6 +237,8 @@ setInterval(function() {
 
   getAllStock();
   getAllUserStock();
+
+
 }, 5000);
 
 
