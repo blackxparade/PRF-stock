@@ -8,6 +8,7 @@ router.post('/authenticate', authenticate);
 router.post('/register', register);
 router.get('/', getAll);
 router.get('/stock', getAllStock);
+router.get('/userstock', getAllUserStock);
 router.get('/current', getCurrent);
 router.put('/:_id', update);
 router.delete('/:_id', _delete);
@@ -54,6 +55,16 @@ function getAllStock(req, res) {
     userService.getAllStock()
         .then(function (stocks) {
             res.send(stocks);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+function getAllUserStock(req, res) {
+    userService.getAllUserStock()
+        .then(function (userstocks) {
+            res.send(userstocks);
         })
         .catch(function (err) {
             res.status(400).send(err);

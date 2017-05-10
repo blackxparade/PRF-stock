@@ -15,11 +15,14 @@ var HomeComponent = (function () {
     function HomeComponent(userService) {
         this.userService = userService;
         this.users = [];
+        this.stocks = [];
+        this.userstocks = [];
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     }
     HomeComponent.prototype.ngOnInit = function () {
         this.loadAllUsers();
         this.loadAllStocks();
+        this.loadAllUserStocks();
     };
     HomeComponent.prototype.deleteUser = function (_id) {
         var _this = this;
@@ -27,12 +30,17 @@ var HomeComponent = (function () {
     };
     HomeComponent.prototype.loadAllUsers = function () {
         var _this = this;
-        this.userService.getAll().subscribe(function (users) { _this.users = users; });
-        console.log(this.users);
+        setTimeout(function () {
+            _this.userService.getAll().subscribe(function (users) { _this.users = users; });
+        }, 1000);
     };
     HomeComponent.prototype.loadAllStocks = function () {
         var _this = this;
         this.userService.getAllStock().subscribe(function (stocks) { _this.stocks = stocks; });
+    };
+    HomeComponent.prototype.loadAllUserStocks = function () {
+        var _this = this;
+        this.userService.getAllUserStock().subscribe(function (userstocks) { _this.userstocks = userstocks; });
     };
     return HomeComponent;
 }());

@@ -23,6 +23,9 @@ var UserService = (function () {
     UserService.prototype.getAllStock = function () {
         return this.http.get(this.config.apiUrl + '/users/stock', this.jwt()).map(function (response) { return response.json(); });
     };
+    UserService.prototype.getAllUserStock = function () {
+        return this.http.get(this.config.apiUrl + '/users/userstock', this.jwt()).map(function (response) { return response.json(); });
+    };
     UserService.prototype.getById = function (_id) {
         return this.http.get(this.config.apiUrl + '/users/' + _id, this.jwt()).map(function (response) { return response.json(); });
     };

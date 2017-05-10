@@ -1,9 +1,9 @@
 ﻿import { Component, OnInit } from '@angular/core';
-
 import { User } from '../_models/index';
 import { UserService } from '../_services/index';
 import { Stock } from '../_models/index';
 import { StockService } from '../_services/index';
+import { UserStock } from '../_models/index';
 
 @Component({
     moduleId: module.id,
@@ -13,7 +13,8 @@ import { StockService } from '../_services/index';
 export class HomeComponent implements OnInit {
     currentUser: User;
     users: User[] = [];
-    stocks: any;
+    stocks: Stock[] = [];
+    userstocks: UserStock[] = [];
 
     constructor(private userService: UserService) {
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -23,6 +24,7 @@ export class HomeComponent implements OnInit {
     ngOnInit() {
         this.loadAllUsers();
         this.loadAllStocks();
+        this.loadAllUserStocks();
     }
 
     deleteUser(_id: string) {
@@ -30,17 +32,22 @@ export class HomeComponent implements OnInit {
     }
 
     private loadAllUsers() {
-        this.userService.getAll().subscribe(users => { this.users = users; });
-                console.log(this.users);
+        setTimeout( () => {
+          this.userService.getAll().subscribe(users => { this.users = users; });
+        },1000);
     }
 
     private loadAllStocks() {
         this.userService.getAllStock().subscribe(stocks => { this.stocks = stocks; });
 
     }
-/*
-    deleteStock(_id: string) {
-        this.stockService.delete(_id).subscribe(() => { this.loadAllStocks() });
+
+    private loadAllUserStocks() {
+        this.userService.getAllUserStock().subscribe(userstocks => { this.userstocks = userstocks; });
+
     }
-*/
+
+
+
+
 }

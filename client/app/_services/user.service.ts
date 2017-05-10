@@ -16,6 +16,10 @@ export class UserService {
         return this.http.get(this.config.apiUrl + '/users/stock', this.jwt()).map((response: Response) => response.json());
     }
 
+    getAllUserStock() {
+        return this.http.get(this.config.apiUrl + '/users/userstock', this.jwt()).map((response: Response) => response.json());
+    }
+
     getById(_id: string) {
         return this.http.get(this.config.apiUrl + '/users/' + _id, this.jwt()).map((response: Response) => response.json());
     }

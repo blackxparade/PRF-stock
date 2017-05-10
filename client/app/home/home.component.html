@@ -3,6 +3,7 @@
     <p>You're logged in with the MEAN Stack & Angular 2!!</p>
     <h3>All registered users:</h3>
     <ul>
+
         <li *ngFor="let user of users">
             {{user.username}} ({{user.firstName}} {{user.lastName}} {{user.money}})
             - <a (click)="deleteUser(user._id)">Delete</a>
@@ -12,7 +13,14 @@
     <h3>Részvények:</h3>
     <ul>
         <li *ngFor="let s of stocks">
-            {{s.stockname}} {{s.price * 2}}
+            {{s.stockname}} {{s.price}}
+        </li>
+    </ul>
+
+    <h3>Felhasználó Részvények:</h3>
+    <ul>
+        <li *ngFor="let userstock of userstocks">
+            {{userstock.username}} {{userstock.stockname}} {{userstock.amount}}
         </li>
     </ul>
 

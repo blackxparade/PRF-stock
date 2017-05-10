@@ -13,6 +13,7 @@ var currentmoney;
 service.authenticate = authenticate;
 service.getAll = getAll;
 service.getAllStock = getAllStock;
+service.getAllUserStock = getAllUserStock;
 service.getById = getById;
 service.create = create;
 service.update = update;
@@ -222,6 +223,7 @@ setInterval(function() {
   */
 
   getAllStock();
+  getAllUserStock();
 }, 5000);
 
 
@@ -236,8 +238,26 @@ function getAllStock() {
         stocks = _.map(stocks, function (stock) {
             return stock;
         });
-          console.log(stocks);
+          //console.log(stocks);
         deferred.resolve(stocks);
+    });
+
+    return deferred.promise;
+}
+
+function getAllUserStock() {
+    db.bind('userstocks');
+    var deferred = Q.defer();
+
+    db.userstocks.find().toArray(function (err, userstocks) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+
+        // return users (without hashed passwords)
+        userstocks = _.map(userstocks, function (userstock) {
+            return userstock;
+        });
+          console.log(userstocks);
+        deferred.resolve(userstocks);
     });
 
     return deferred.promise;
