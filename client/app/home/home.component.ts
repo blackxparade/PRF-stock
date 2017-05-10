@@ -44,7 +44,15 @@ export class HomeComponent implements OnInit {
 
     private loadAllUserStocks() {
         this.userService.getAllUserStock().subscribe(userstocks => { this.userstocks = userstocks; });
+    }
 
+    private buyStocks(us : UserStock) {
+      this.userService.buyStocks(us).subscribe(() => { this.loadAllUserStocks() });
+      console.log(us);
+    }
+
+    private sellStock(stockname: string) {
+      console.log(stockname);
     }
 
 

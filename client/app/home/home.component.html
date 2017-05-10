@@ -13,7 +13,8 @@
     <h3>Részvények:</h3>
     <ul>
         <li *ngFor="let s of stocks">
-            {{s.stockname}} {{s.price}}
+            {{s.stockname}}
+            {{s.price}} <button (click)="buyStocks(currentUser.username, s.stockname)">Buy</button> <button (click)="sellStock(s.stockname)" >Sell</button>
         </li>
     </ul>
 
@@ -21,6 +22,7 @@
     <ul>
         <li *ngFor="let userstock of userstocks">
             {{userstock.username}} {{userstock.stockname}} {{userstock.amount}}
+            <button (click)="buyStocks(userstock)">Buy</button>
         </li>
     </ul>
 

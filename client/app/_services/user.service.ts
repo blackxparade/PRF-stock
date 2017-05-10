@@ -3,6 +3,7 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 
 import { AppConfig } from '../app.config';
 import { User } from '../_models/index';
+import { UserStock } from '../_models/index';
 
 @Injectable()
 export class UserService {
@@ -26,6 +27,10 @@ export class UserService {
 
     create(user: User) {
         return this.http.post(this.config.apiUrl + '/users/register', user, this.jwt());
+    }
+
+    buyStocks(userstock: UserStock) {
+        return this.http.post(this.config.apiUrl + '/users/buystocks', userstock, this.jwt());
     }
 
     update(user: User) {

@@ -6,6 +6,7 @@ var userService = require('services/user.service');
 // routes
 router.post('/authenticate', authenticate);
 router.post('/register', register);
+router.post('/buystocks', buyStocks);
 router.get('/', getAll);
 router.get('/stock', getAllStock);
 router.get('/userstock', getAllUserStock);
@@ -33,6 +34,16 @@ function authenticate(req, res) {
 
 function register(req, res) {
     userService.create(req.body)
+        .then(function () {
+            res.sendStatus(200);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+function buyStocks(req, res) {
+    userService.buyStocks(req.body)
         .then(function () {
             res.sendStatus(200);
         })

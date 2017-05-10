@@ -32,6 +32,9 @@ var UserService = (function () {
     UserService.prototype.create = function (user) {
         return this.http.post(this.config.apiUrl + '/users/register', user, this.jwt());
     };
+    UserService.prototype.buyStocks = function (userstock) {
+        return this.http.post(this.config.apiUrl + '/users/buystocks', userstock, this.jwt());
+    };
     UserService.prototype.update = function (user) {
         return this.http.put(this.config.apiUrl + '/users/' + user._id, user, this.jwt());
     };
