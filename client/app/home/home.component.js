@@ -11,8 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var index_1 = require("../_services/index");
+var index_2 = require("../_models/index");
 var HomeComponent = (function () {
-    function HomeComponent(userService) {
+    function HomeComponent(userService, cd) {
         this.userService = userService;
         this.users = [];
         this.stocks = [];
@@ -30,25 +31,50 @@ var HomeComponent = (function () {
     };
     HomeComponent.prototype.loadAllUsers = function () {
         var _this = this;
-        setTimeout(function () {
-            _this.userService.getAll().subscribe(function (users) { _this.users = users; });
-        }, 1000);
+        this.userService.getAll().subscribe(function (users) {
+            _this.users = users;
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].username == _this.currentUser.username)
+                    _this.currentMoney = users[i].money;
+            }
+        });
     };
     HomeComponent.prototype.loadAllStocks = function () {
         var _this = this;
         this.userService.getAllStock().subscribe(function (stocks) { _this.stocks = stocks; });
+        console.log('users length: ' + this.users.length);
     };
     HomeComponent.prototype.loadAllUserStocks = function () {
         var _this = this;
-        this.userService.getAllUserStock().subscribe(function (userstocks) { _this.userstocks = userstocks; });
+        this.userService.getAllUserStock().subscribe(function (userstocks) {
+            for (var i = 0; i < userstocks.length; i++) {
+                if (userstocks[i].username == _this.currentUser.username) {
+                    _this.userstocks.push(userstocks[i]);
+                }
+            }
+            _this.moneyInStocks = 0;
+            for (var i = 0; i < _this.userstocks.length; i++) {
+                for (var j = 0; j < _this.stocks.length; j++) {
+                    if (_this.userstocks[i].stockname == _this.stocks[j].stockname) {
+                        console.log('yay');
+                        _this.moneyInStocks = _this.moneyInStocks + (_this.stocks[j].price * _this.userstocks[i].amount);
+                    }
+                }
+            }
+        });
     };
-    HomeComponent.prototype.buyStocks = function (us) {
+    HomeComponent.prototype.buyStocks = function (username, stockname, buy) {
         var _this = this;
-        this.userService.buyStocks(us).subscribe(function () { _this.loadAllUserStocks(); });
-        console.log(us);
-    };
-    HomeComponent.prototype.sellStock = function (stockname) {
-        console.log(stockname);
+        var sstock = new index_2.UserStock;
+        sstock.stockname = stockname;
+        sstock.username = username;
+        if (buy)
+            sstock.amount = Number(this.inputAmount);
+        else
+            sstock.amount = -this.inputAmount;
+        this.inputAmount = 0;
+        console.log(sstock.amount);
+        this.userService.buyStocks(sstock).subscribe(function () { _this.loadAllUserStocks(); });
     };
     return HomeComponent;
 }());
@@ -57,7 +83,7 @@ HomeComponent = __decorate([
         moduleId: module.id,
         templateUrl: 'home.component.html'
     }),
-    __metadata("design:paramtypes", [index_1.UserService])
+    __metadata("design:paramtypes", [index_1.UserService, core_1.ChangeDetectorRef])
 ], HomeComponent);
 exports.HomeComponent = HomeComponent;
 //# sourceMappingURL=home.component.js.map

@@ -93,7 +93,7 @@ function create(userParam) {
 
             if (user) {
                 // username already exists
-                deferred.reject('Username "' + userParam.username + '" is already taken');
+                deferred.reject('A(z) "' + userParam.username + '" felahsználónév foglalt');
             } else {
                 createUser();
             }
@@ -134,7 +134,7 @@ function update(_id, userParam) {
 
                     if (user) {
                         // username already exists
-                        deferred.reject('Username "' + req.body.username + '" is already taken')
+                        deferred.reject('A "' + req.body.username + '" felahsználónév foglalt')
                     } else {
                         updateUser();
                     }
@@ -187,13 +187,54 @@ function _delete(_id) {
 function buyStocks(us) {
   db.bind('userstocks');
   //db.userstocks.findOne({username: 'aa', stockname: 'Samsung'},{'amount'});
-  var _amount;
+  var _amount = 0;
+  var _VALIDAMOUNT = 0;
+  var _stock;
   db.userstocks.findOne({ 'username': us.username, 'stockname': us.stockname }, function (err, stock) {
     if (err) return handleError(err);
-    console.log(stock.amount);
-    db.userstocks.findOneAndUpdate({username: us.username, stockname: us.stockname},
-                                  {username: us.username, stockname: us.stockname, amount:stock.amount + 1});
+    if (!stock) {
+      //if there is no such stock, create one
+      console.log('Nincs ilyen user stock!');
+      db.userstocks.insert({username: us.username,
+                            stockname: us.stockname,
+                            amount: us.amount});
+      _VALIDAMOUNT = us.amount;
+    }
+    else {
+
+      // update the users stock amount
+      _VALIDAMOUNT = Number(us.amount);
+      _amount = Number(stock.amount) + Number(us.amount);
+      db.userstocks.findOneAndUpdate({username: us.username, stockname: us.stockname},
+                                    {username: us.username, stockname: us.stockname, amount:Number(_amount)});
+      console.log('amount1: ' + Number(_amount));
+    }
   });
+
+  //calculate the updated user money
+  db.bind('stocks');
+  db.stocks.findOne({ 'stockname': us.stockname}, function (err, sstock) {
+    console.log(sstock.price);
+    //_stock = sstock;
+    if (err) return handleError(err);
+
+    db.bind('users');
+    db.users.findOne({ 'username': us.username}, function (err, user) {
+      if (err) return handleError(err);
+
+      var newmoney = 0;
+      console.log('amount2: ' + Number(_VALIDAMOUNT));
+      newmoney = Number(user.money) - (Number(_VALIDAMOUNT) * Number(sstock.price) );
+
+
+      db.users.update({username: us.username}, {$set:{money:newmoney}});
+    });
+  });
+
+
+
+
+
 }
 
 /*
@@ -201,7 +242,7 @@ Demo function, it doubles the aa user's money in every 5 seconds.
 */
 
 setInterval(function() {
-  console.log("Updating stocks...");
+  console.log("Updating money...");
   db.bind('users');
 
   db.users.findOne({username: 'aa'}, function(err, result) {
@@ -219,24 +260,6 @@ setInterval(function() {
   });
 
 
-/*
-  console.log("Updating stocks...");
-  db.bind('stocks');
-
-  db.stocks.find().toArray(function (err, stocks) {
-      if (!err) {
-
-        // return users (without hashed passwords)
-        stocks = _.map(stocks, function (stock) {
-            return _.omit(stock, '_id');
-        });
-        //console.log(stocks);
-      }
-  });
-  */
-
-  getAllStock();
-  getAllUserStock();
 
 
 }, 5000);
@@ -271,7 +294,7 @@ function getAllUserStock() {
         userstocks = _.map(userstocks, function (userstock) {
             return userstock;
         });
-          console.log(userstocks);
+          //console.log(userstocks);
         deferred.resolve(userstocks);
     });
 

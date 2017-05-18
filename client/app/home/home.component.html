@@ -1,30 +1,44 @@
-﻿<div class="col-md-6 col-md-offset-3">
-    <h1>Hi {{currentUser.firstName}}!</h1>
-    <p>You're logged in with the MEAN Stack & Angular 2!!</p>
-    <h3>All registered users:</h3>
-    <ul>
+<div class="col-md-12">
+    <h1>Üdvözlünk {{currentUser.firstName}}!</h1>
 
-        <li *ngFor="let user of users">
-            {{user.username}} ({{user.firstName}} {{user.lastName}} {{user.money}})
-            - <a (click)="deleteUser(user._id)">Delete</a>
-        </li>
-    </ul>
+    
 
-    <h3>Részvények:</h3>
-    <ul>
-        <li *ngFor="let s of stocks">
-            {{s.stockname}}
-            {{s.price}} <button (click)="buyStocks(currentUser.username, s.stockname)">Buy</button> <button (click)="sellStock(s.stockname)" >Sell</button>
-        </li>
-    </ul>
+    <h3> <b>Elérhető részvények:</b> </h3>
 
-    <h3>Felhasználó Részvények:</h3>
-    <ul>
-        <li *ngFor="let userstock of userstocks">
-            {{userstock.username}} {{userstock.stockname}} {{userstock.amount}}
-            <button (click)="buyStocks(userstock)">Buy</button>
-        </li>
-    </ul>
+    <table>
+        <tr>
+            <th>Név</th>
+            <th>Ár</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr *ngFor="let s of stocks">
+            <td style="padding: 8px"> {{ s.stockname }} </td>
+            <td align="right"> {{ s.price }} </td>
+            <td>  <input [(ngModel)]="inputAmount" type="money"> </td>
+            <td> <button (click)="buyStocks(currentUser.username, s.stockname, true)"> Vásárlás</button> </td>
+            <td> <button (click)="buyStocks(currentUser.username, s.stockname, false)" > Eladás </button> </td>
+        </tr>
+    </table>
 
-    <p><a [routerLink]="['/login']">Logout</a></p>
+    <h3> <b>Részvényeid:</b></h3>
+    <table>
+        <tr>
+            <th> <h3>Név</h3> </th>
+            <th> <h3>Birtokolt (db)</h3> </th>
+        </tr>
+        <tr *ngFor="let userstock of userstocks">
+            <td style="padding: 5px" align="left"> <h4> {{userstock.stockname}} </h4> </td>
+            <td align="right"> <h4> <b> {{userstock.amount}} </b>  </h4> </td>
+        </tr>
+    </table>
+
+        <div> <h3>Felhasználható keret:</h3> 
+           <h4> <b> {{currentMoney}} </b> </h4>
+    </div> 
+        <h3>Birtokolt részvények aktuális értéke:</h3> 
+           <h4> <b> {{moneyInStocks}} </b> </h4>
+
+    <p style="padding: 30px;" align="right"><a [routerLink]="['/login']" class="btn btn-primary">Kijelentkezés</a></p>
 </div>
